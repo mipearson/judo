@@ -18,7 +18,7 @@ module Judo
       metadata      = options[:metadata]
       ip            = options[:elastic_ip]
       clone         = options[:clone]
-      instance_type = options[:instance_type]
+      instance_type = options[:instance_type] || 'm1.small'
       version       = options[:version] || group.version
 
       task("Creating server #{name}") do
