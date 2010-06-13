@@ -137,7 +137,7 @@ module Judo
           printf "    %-24s: %s\n",k, i[k]
         end
       end
-      sub_info("METADATA", server.metadata.keys) do |key|
+      sub_info("METADATA", (server.metadata || {}).keys) do |key|
         printf("    %-24s: %s\n", key, server.metadata[key] )
       end
       sub_info("VOLUMES", server.ec2_volumes) do |v|
