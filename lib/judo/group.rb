@@ -54,7 +54,7 @@ module Judo
         userdata = File.read("#{name}/userdata.erb")
         tar = tar_file(@version)
         puts ""
-        system "tar czvf #{tar} #{name}"
+        Util.system_comfirmed "tar czvf #{tar} #{name}"
         puts "Uploading config to s3..."
         @base.s3_put(version_config_file(@version), conf.to_json)
         puts "Uploading userdata.erb to s3..."
