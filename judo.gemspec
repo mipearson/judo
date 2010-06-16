@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Orion Henry"]
-  s.date = %q{2010-06-14}
+  s.date = %q{2010-06-15}
   s.default_executable = %q{judo}
   s.description = %q{The gentle way to manage and control ec2 instances}
   s.email = %q{orion@heroku.com}
@@ -32,7 +32,8 @@ Gem::Specification.new do |s|
      "lib/judo/group.rb",
      "lib/judo/patch.rb",
      "lib/judo/server.rb",
-     "lib/judo/snapshot.rb"
+     "lib/judo/snapshot.rb",
+     "lib/judo/util.rb"
   ]
   s.homepage = %q{http://github.com/orionz/judo}
   s.rdoc_options = ["--charset=UTF-8"]
