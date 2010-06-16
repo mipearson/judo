@@ -503,6 +503,13 @@ module Judo
     def ssh_command(cmd)
       wait_for_ssh
       @base.keypair_file do |file|
+        Kernel.system "ssh -q -i #{file} #{config["user"]}@#{hostname} '#{cmd}'"
+      end
+    end
+
+    def ssh_command!(cmd)
+      wait_for_ssh
+      @base.keypair_file do |file|
         Util.system_confirmed "ssh -q -i #{file} #{config["user"]}@#{hostname} '#{cmd}'"
       end
     end
