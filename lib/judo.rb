@@ -12,7 +12,7 @@ require 'tempfile'
 class JudoError < RuntimeError ; end
 class JudoInvalid < RuntimeError ; end
 
-require File.dirname(__File__) + '/judo/util'
+require File.dirname(__FILE__) + '/judo/util'
 require File.dirname(__FILE__) + '/judo/base'
 require File.dirname(__FILE__) + '/judo/group'
 require File.dirname(__FILE__) + '/judo/server'
