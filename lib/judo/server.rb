@@ -202,7 +202,7 @@ module Judo
     def clone_snapshots(snapshots)
       snapshots.each do |device,snap_id|
         task("Creating EC2 Volume #{device} from #{snap_id}") do
-          volume_id = @base.ec2.create_volume(snap_id, nil, ec2_availability_zone)[:aws_id]
+          volume_id = @base.ec2.create_volume(snap_id, nil, config["availability_zone"])[:aws_id]
           add_volume(volume_id, device)
         end
       end
@@ -216,7 +216,7 @@ module Judo
             size = volume_config["size"]
             if not volumes[device]
               task("Creating EC2 Volume #{device} #{size}") do
-                volume_id = @base.ec2.create_volume(nil, size, ec2_availability_zone)[:aws_id]
+                volume_id = @base.ec2.create_volume(nil, size, config["availability_zone"])[:aws_id]
                 add_volume(volume_id, device)
               end
             else
@@ -293,10 +293,6 @@ module Judo
 
     def ec2_state
       ec2_instance[:aws_state]
-    end
-
-    def ec2_availability_zone
-      ec2_instance[:aws_availability_zone]
     end
 
     def running?
