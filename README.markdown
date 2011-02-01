@@ -7,7 +7,7 @@ to get going and powerful.
 
 Servers and Groups.  Servers are identified by a naked string.  Groups always
 have a colon prefix.  The special group :all refers to all groups.  A name prepended
-by a carrot will exclude that selection.
+by a caret will exclude that selection.
 
     $ judo restart myserver1                ## this restarts myserver1
     $ judo restart myserver1 myserver2      ## this restarts myserver1 and myserver2
