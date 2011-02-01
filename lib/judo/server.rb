@@ -9,7 +9,7 @@ module Judo
     end
 
     def create(name, options)
-      raise JudoError, "group '#{group_name}' does not exists" unless group
+      raise JudoError, "group '#{group_name}' does not exist" unless group
       raise JudoError, "there is already a server named #{name}" if @base.servers.detect { |s| s.name == name and s != self}
       raise JudoError, "there is already a server with id #{id}" if @base.servers.detect { |s| s.id == id and s != self}
 
@@ -360,6 +360,13 @@ module Judo
         :key_name => "judo",
         :group_ids => security_groups,
         :user_data => ud).first
+      {
+        'Name' => name,
+        'Created By' => ENV['USER'],
+        'judo Group' => group
+      }.each do |key, val|
+        @base.ec2.create_tag(result[:aws_instance_id], key, val)
+      end
       update "instance_id" => result[:aws_instance_id], "virgin" => false, "started_at" => Time.now.to_i
     end
 
