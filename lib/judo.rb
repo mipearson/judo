@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'erb'
 require 'active_support'
-require 'right_aws'
+require 'aws'
 require 'socket'
 require 'fileutils'
 require 'yaml'
