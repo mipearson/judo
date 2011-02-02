@@ -1,7 +1,7 @@
 module Judo
   class Server
     attr_accessor :base, :id, :group_name
-
+        
     def initialize(base, id, group_name, version = nil)
       @base = base
       @id = id
@@ -177,6 +177,10 @@ module Judo
 
     def instance_type
      get("instance_type")
+    end
+    
+    def set_instance_type type
+      update({'instance_type' => type})
     end
 
     def config
@@ -592,6 +596,5 @@ module Judo
     def boot
       @boot || {}
     end
-
   end
 end
