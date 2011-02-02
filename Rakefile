@@ -13,6 +13,7 @@ Jeweler::Tasks.new do |s|
 	s.add_dependency "aws",  [">= 2.4.0"]
 	s.add_dependency "json"
 	s.add_dependency "activesupport"
+	s.add_dependency "rainbow"
 end
 
 Jeweler::RubyforgeTasks.new

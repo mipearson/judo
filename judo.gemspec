@@ -49,15 +49,18 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<aws>, [">= 2.4.0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])
       s.add_runtime_dependency(%q<activesupport>, [">= 0"])
+      s.add_runtime_dependency(%q<rainbow>, [">= 0"])
     else
       s.add_dependency(%q<aws>, [">= 2.4.0"])
       s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<activesupport>, [">= 0"])
+      s.add_dependency(%q<rainbow>, [">= 0"])
     end
   else
     s.add_dependency(%q<aws>, [">= 2.4.0"])
     s.add_dependency(%q<json>, [">= 0"])
     s.add_dependency(%q<activesupport>, [">= 0"])
+    s.add_dependency(%q<rainbow>, [">= 0"])
   end
 end
 
