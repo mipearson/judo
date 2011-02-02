@@ -1,3 +1,8 @@
 * Add check for ruby 1.9.x (or make ruby 1.8.x compatiable)
   Currently failing: force_encoding
   
+* Fix issue where first ssh takes ages (dns?)
+
+* Allow custom keypairs
+
+* Default instance type (I almost never want m1.small)
