@@ -365,6 +365,7 @@ module Judo
         :key_name => @base.keypair_name,
         :group_ids => security_groups,
         :user_data => ud).first
+      sleep 1 # TODO Find a better solution for Issue #1
       {
         'Name' => name,
         'Created By' => ENV['USER'],
