@@ -1,16 +1,16 @@
 module Judo
   module CLIHelpers
-		def default_group_dir
+    def default_group_dir
       File.expand_path(File.dirname(__FILE__) + "/../../default")
     end
 
     def do_generate(judo, args)
-			name = args.first || 'default'
-			if File.exists?(name)
-				puts "group already exists at /#{name}"
-			else
-			  FileUtils.cp_r(default_group_dir, name)
-			end
+      name = args.first || 'default'
+      if File.exists?(name)
+        puts "group already exists at /#{name}"
+      else
+        FileUtils.cp_r(default_group_dir, name)
+      end
     end
 
     def each_server(judo, args, &blk)
@@ -44,13 +44,13 @@ module Judo
     end
 
     def do_commit(judo, args)
-			name = args.first
-			if name =~ /:(.+)$/
+      name = args.first
+      if name =~ /:(.+)$/
         group = judo.get_group($1)
       else
         raise JudoError, "Invalid group name '#{name}'"
       end
-			group.commit
+      group.commit
     end
 
     def mk_servers(judo, options, args, start)
