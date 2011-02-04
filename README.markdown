@@ -32,12 +32,15 @@ Setting up a new judo repo named "my_cloud" would look like this:
     $ export AWS_ACCESS_KEY_ID="..."
     $ mkdir my_cloud
     $ cd my_cloud
-    $ judo setup --bucket BUCKET
+    $ judo generate
+    $ judo commit :default
 
-The 'judo setup' command will make a .judo folder to store your EC2 keys and S3
-bucket.  It will also make a folder named "default" to hold the default server
+The `judo generate` command will make a folder named "default" to hold the default server
 config.  Feel free to examine the default folder.  It consists of some example
 files for a simple server.
+
+The `judo commit` command will upload the default group configuration to AWS so that
+it can be used. You'll need to commit every time you make a change to your group config.
 
 To launch a default server you create it
 

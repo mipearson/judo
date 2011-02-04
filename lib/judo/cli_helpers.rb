@@ -5,7 +5,7 @@ module Judo
     end
 
     def do_generate(judo, args)
-			name = args.first
+			name = args.first || 'default'
 			if File.exists?(name)
 				puts "group already exists at /#{name}"
 			else
