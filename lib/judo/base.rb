@@ -253,12 +253,24 @@ module Judo
       if !has_init?
         init_sdb
         init_security_group
+      end
+      if !has_keypair?
         init_keypair
       end
     end
 
     def has_init?
       sdb.list_domains[:domains].include?(base_domain)
+    end
+    
+    def has_keypair?
+      begin
+        ec2.describe_key_pairs([keypair_name])
+        true
+      rescue Aws::AwsError => e
+        raise unless e.message.start_with?('InvalidKeyPair.NotFound')
+        false
+      end
     end
 
     def init_sdb
@@ -279,21 +291,28 @@ module Judo
     end
 
     def init_keypair
-      task("Initializing Judo Keypair") do
-        ec2.delete_key_pair("judo")
-        material = ec2.create_key_pair("judo")[:aws_material]
-        s3_put("judo.pem", material)
+      task("Initializing Keypair (#{keypair_name})") do
+        material = ec2.create_key_pair(keypair_name)[:aws_material]
+        s3_put(keypair_filename, material)
       end
     end
 
     def keypair_file(&blk)
-      Tempfile.open("judo.pem") do |file|
-        file.write(s3_get("judo.pem"))
+      Tempfile.open(keypair_filename) do |file|
+        file.write(s3_get(keypair_filename))
         file.flush
         blk.call(file.path)
       end
     end
-
+    
+    def keypair_name
+      ENV['AWS_KEYPAIR_NAME'] || 'judo'
+    end
+    
+    def keypair_filename
+      keypair_name + ".pem"
+    end
+    
     def set_db_version(new_version)
       update "dbversion" => new_version
     end

@@ -362,7 +362,7 @@ module Judo
       result = @base.ec2.launch_instances(ami,
         :instance_type => instance_type,
         :availability_zone => config["availability_zone"],
-        :key_name => "judo",
+        :key_name => @base.keypair_name,
         :group_ids => security_groups,
         :user_data => ud).first
       {
