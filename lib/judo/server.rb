@@ -100,6 +100,7 @@ module Judo
       end
     end
 
+    
     def version_desc
       group.version_desc(version)
     end
@@ -314,6 +315,7 @@ module Judo
       invalid "No config has been commited yet, type 'judo commit'" unless group.version > 0
 
       task("Updating server version")      { update_version(options[:version]) } if options[:version]
+      task("Creating keypair #{keypair.name}") { keypair.create! } unless keypair.exist?
       task("Starting server #{name}")      { launch_ec2 }
       task("Wait for server")              { wait_for_running } if elastic_ip or has_volumes?
       task("Attaching ip")                 { attach_ip } if elastic_ip
@@ -356,13 +358,17 @@ module Judo
       update "stopped_at" => Time.now.to_i
     end
 
+    def keypair
+      @keypair ||= Judo::Keypair.new(@base, (group.config(version)['keypair'] || 'judo'))
+    end
+    
     def launch_ec2
       ud = user_data
       debug(ud)
       result = @base.ec2.launch_instances(ami,
         :instance_type => instance_type,
         :availability_zone => config["availability_zone"],
-        :key_name => @base.keypair_name,
+        :key_name => keypair.name,
         :group_ids => security_groups,
         :user_data => ud).first
       sleep 1 # TODO Find a better solution for Issue #1
@@ -511,22 +517,22 @@ module Judo
 
     def ssh_command(cmd)
       wait_for_ssh
-      @base.keypair_file do |file|
+      keypair.file do |file|
         Kernel.system "ssh -q -i #{file} #{config["user"]}@#{hostname} '#{cmd}'"
       end
     end
 
     def ssh_command!(cmd)
       wait_for_ssh
-      @base.keypair_file do |file|
+      keypair.file do |file|
         Util.system_confirmed "ssh -q -i #{file} #{config["user"]}@#{hostname} '#{cmd}'"
       end
     end
 
     def connect_ssh
       wait_for_ssh
-      @base.keypair_file do |file|
-        system "ssh -q -i #{file} #{config["user"]}@#{hostname}"
+      keypair.file do |file|
+        system "ssh -i #{file} #{config["user"]}@#{hostname}"
       end
     end
 

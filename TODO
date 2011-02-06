@@ -3,11 +3,27 @@
   
 * Fix issue where first ssh takes ages (dns?)
 
-* Allow custom keypairs
-
-* Default instance type (I almost never want m1.small)
-
 * Unknown race condition:
 ---> Starting server soccer-app-ci... /Users/mpearson/.rvm/gems/ruby-1.9.2-p0/gems/aws-2.4.2/lib/awsbase/awsbase.rb:540:in `request_info_impl': InvalidInstanceID.NotFound: The instance ID 'i-01ea796d' does not exist (Aws::AwsError)
 REQUEST=ec2.amazonaws.com:443/?AWSAccessKeyId=AKIAI57IM5CQTGKGLPSQ&Action=CreateTags&ResourceId.1=i-01ea796d&SignatureMethod=HmacSHA256&SignatureVersion=2&Tag.1.Key=Name&Tag.1.Value=soccer-app-ci&Timestamp=2011-02-03T23%3A50%3A43.000Z&Version=2010-08-31&Signature=wlWB1ubB2AYGNqFzW8RQoJORIMv%2FUH%2Bz2gYZnf%2FuPb8%3D 
 REQUEST ID=0b3c46f8-a580-4ad4-b3e7-01c9d10f5799 
+
+* scp support
+
+* Port to bundler
+
+* Some native way of juggling multiple accounts
+
+* Look at fog instead of right_aws
+
+* Unit tests
+
+* Passing around @base is a broken model for accessing ec2 - move to a Singleton
+
+* Warn on destroy if owner tag != ENV['USER']
+
+* Attempt to make judo list output fit on a 80column terminal (autoscale?)
+
+* Judo commit history / commit messages
+
+* Er, did I add functionality that already exists with :default_instance_type? Check to see if :instance_type works (although I can't see it in the code)

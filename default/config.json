@@ -7,4 +7,5 @@
   "example_config": "example_mode",
   "availability_zone":"us-east-1d",
   "default_instance_type": "c1.medium"
+  "keypair": "optional_keypair_name"
 }

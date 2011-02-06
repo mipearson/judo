@@ -19,6 +19,7 @@ require_relative 'judo/group'
 require_relative 'judo/server'
 require_relative 'judo/snapshot'
 require_relative 'judo/patch'
+require_relative 'judo/keypair'
 
 if ENV['BENCH_EVERYTHING']
   ENV['BENCH_METHODS'] = '1'
