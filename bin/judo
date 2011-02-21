@@ -56,6 +56,9 @@ banner
   opts.on( '-s', '--secret KEY', 'Specify the AWS access secret key' ) do |key|
     options[:access_secret] = key
   end
+  opts.on( '-r', '--region REGION', 'Specify the AWS region (eg us-west-1)') do |region|
+    options[:region] = region
+  end
   opts.on( '-f', '--force', 'Force a stop or restart (immediately force detach volumes)' ) do
     options[:force] = true
   end

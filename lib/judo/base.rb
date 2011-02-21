@@ -1,17 +1,53 @@
 module Judo
   class Base
     attr_accessor :group
-
+        
+    # ALL REGION METHODS ARE HERE AS THEY WILL BE MOVED TO A NEW CLASS SHORTLY
+    
+    # Sourced from http://docs.amazonwebservices.com/AmazonSimpleDB/latest/DeveloperGuide/index.html?Endpoints.html
+    # and http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteEndpoints.html.
+    # Also http://www.elastician.com/2009/12/comprehensive-list-of-aws-endpoints.html
+    def endpoint_for_region service
+      if region == 'us-east-1'
+        service + '.amazonaws.com'
+      elsif service == 's3'
+        service + '-' + region + '.amazonaws.com'
+      else
+        service + '.' + region + '.amazonaws.com'
+      end
+    end
+    
+    def s3_location_for_region
+      if region == 'eu-west-1'
+        # http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteEndpoints.html
+        'eu'
+      else
+        region
+      end
+    end
+    
+    def bucket_name_for_region name
+      if region == 'us-east-1' # compatability with existing judo buckets
+        name
+      else
+        (name.gsub('_', '-') + region).downcase # new regions don't allow _'s in their bucket names or uppercase characters
+      end
+    end  
+    
+    # END REGION METHODS
+        
     def self.defaults
       {
         :access_id     => ENV['AWS_ACCESS_KEY_ID'],
-        :access_secret => ENV['AWS_SECRET_ACCESS_KEY']
+        :access_secret => ENV['AWS_SECRET_ACCESS_KEY'],
+        :region        => ENV['AWS_REGION']
       }
     end
 
     def initialize(options)
       @access_id     = options[:access_id]
       @access_secret = options[:access_secret]
+      @region        = options[:region]
     end
 
     def access_id
@@ -21,9 +57,13 @@ module Judo
     def access_secret
       @access_secret || (raise JudoError, "no AWS Secret Key specified")
     end
+    
+    def region
+      @region || 'us-east-1'
+    end
 
     def bucket_name
-      "judo_#{access_id}"
+      bucket_name_for_region("judo_#{access_id}")
     end
 
     def server_domain
@@ -93,9 +133,9 @@ module Judo
         }
       end
     end
-
+    
     def sdb
-      @sdb ||= Aws::SdbInterface.new(access_id, access_secret, :logger => Logger.new(nil))
+      @sdb ||= Aws::SdbInterface.new(access_id, access_secret, :logger => Logger.new(nil), :server => endpoint_for_region('sdb'))
     end
 
     def fetch_snapshots_state
@@ -195,7 +235,7 @@ module Judo
     end
 
     def ec2
-      @ec2 ||= Aws::Ec2.new(access_id, access_secret, :logger => Logger.new(nil))
+      @ec2 ||= Aws::Ec2.new(access_id, access_secret, :logger => Logger.new(nil), :server => endpoint_for_region('ec2'))
     end
 
     def group_versions
@@ -211,11 +251,11 @@ module Judo
     end
 
     def s3
-      @s3 ||= Aws::S3.new(access_id, access_secret, :logger => Logger.new(nil))
+      @s3 ||= Aws::S3.new(access_id, access_secret, :logger => Logger.new(nil), :server => endpoint_for_region('s3'))
     end
 
     def bucket
-      @bucket ||= s3.bucket(bucket_name, true)
+      @bucket ||= s3.bucket(bucket_name, true, nil, :location => s3_location_for_region)
     end
 
     def s3_url(k)
