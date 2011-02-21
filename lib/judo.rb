@@ -1,7 +1,8 @@
 require 'rubygems'
 require 'erb'
 require 'active_support'
-require 'aws'
+require File.expand_path(File.join(File.dirname(__FILE__), 'extras', 'require_relative')) # needed for right_aws
+require 'right_aws'
 require 'socket'
 require 'fileutils'
 require 'yaml'
