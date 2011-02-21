@@ -100,7 +100,7 @@ module Judo
     end
 
     def do_snapshots(judo, args)
-      printf "  SNAPSHOTS\n"
+      printf "  SNAPSHOTS in #{judo.region}\n"
       printf "%s\n", ("-" * 80)
       judo.snapshots.each do |snapshot|
         printf "%-15s %-25s %-15s %-10s %s\n", snapshot.name, snapshot.server_name, snapshot.group_name, snapshot.version_desc, "ebs:#{snapshot.ec2_ids.size}"
@@ -108,7 +108,7 @@ module Judo
     end
 
     def do_list(judo, args)
-      printf "  SERVERS\n"
+      printf "  SERVERS in #{judo.region}\n"
       printf "%s\n", ("-" * 80)
       args << ":all" if args.empty?
       each_server(judo,args) do |s|
@@ -127,7 +127,7 @@ module Judo
     end
 
     def do_info(judo, server)
-      puts "[ #{server} ]"
+      puts "[ #{server} ] in #{judo.region}"
       printf "    %-24s: %s\n", "ID", server.id
       printf "    %-24s: %s\n", "Group", server.group.name
       printf "    %-24s: %s\n", "Animated From", server.clone if server.clone

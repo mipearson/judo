@@ -1,21 +1,24 @@
 {
   "ami32": {
-    'us-east-1': "ami-88f504e1", // public ubuntu 10.04 ami - 32 bit
-    'ap-southeast-1': "ami-60423c32",
-    'us-west-1': 'ami-917e2ed4',
-    'eu-west-1': 'ami-399ca94d',
+    "us-east-1": "ami-88f504e1", // public ubuntu 10.04 ami - 32 bit
+    "ap-southeast-1": "ami-60423c32",
+    "us-west-1": "ami-917e2ed4",
+    "eu-west-1": "ami-399ca94d"
   },
   "ami64": {
-    'us-east-1': "ami-f8f40591", // public ubuntu 10.04 ami - 64 bit
-    'ap-southeast-1': 'ami-0a423c58',
-    'us-west-1': 'ami-ab7e2eee',
-    'eu-west-1': 'ami-0d9ca979'
+    "us-east-1": "ami-f8f40591", // public ubuntu 10.04 ami - 64 bit
+    "ap-southeast-1": "ami-0a423c58",
+    "us-west-1": "ami-ab7e2eee",
+    "eu-west-1": "ami-0d9ca979"
   }, 
-  "user":"ubuntu",        // this is for ssh acccess - defaults to ubuntu not root
+  "user": "ubuntu",        // this is for ssh acccess - defaults to ubuntu not root
   "kuzushi_version": "0.0.54",  // this will pin the version of kuzushi the server will boot with
   "security_group":"judo",
   "example_config": "example_mode",
-  "availability_zone":"us-east-1d",
+  "availability_zone": {
+    "us-east-1": "us-east-1d"
+    // other availability zones will default to the region name + "a"
+  },
   "default_instance_type": "c1.medium",
   "keypair": "judo"
 }

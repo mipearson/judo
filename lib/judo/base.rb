@@ -11,26 +11,33 @@ module Judo
       if region == 'us-east-1'
         service + '.amazonaws.com'
       elsif service == 's3'
-        service + '-' + region + '.amazonaws.com'
+        #service + '-' + region + '.amazonaws.com'
+        's3.amazonaws.com' # locking to us-east s3 until I grok s3 regions
       else
         service + '.' + region + '.amazonaws.com'
       end
     end
     
     def s3_location_for_region
-      if region == 'eu-west-1'
-        # http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteEndpoints.html
-        'eu'
-      else
-        region
-      end
+      nil # locking to us-east s3 until I grok s3 regions
+           #  
+           # if region == 'eu-west-1'
+           #   # http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteEndpoints.html
+           #   'eu'
+           # elsif region == 'us-east-1'
+           #   # compatability with existing judo buckets
+           #   nil
+           # else
+           #   region
+           # end
     end
     
-    def bucket_name_for_region name
+    def bucket_name_for_region name      
       if region == 'us-east-1' # compatability with existing judo buckets
         name
       else
-        (name.gsub('_', '-') + region).downcase # new regions don't allow _'s in their bucket names or uppercase characters
+        #(name.gsub('_', '-') + region).downcase # new regions don't allow _'s in their bucket names or uppercase characters
+        name + region.gsub('-', '_') # using us-east s3 for the time being, and it doesn't like dashes. (wtf?)
       end
     end  
     
@@ -203,7 +210,7 @@ module Judo
     end
 
     def task(msg, &block)
-      printf "---> %-24s ", "#{msg}..."
+      printf "#{region}:> %-40s ", "#{msg}..."
       STDOUT.flush
       start = Time.now
       result = block.call
@@ -257,7 +264,7 @@ module Judo
     def bucket
       @bucket ||= s3.bucket(bucket_name, true, nil, :location => s3_location_for_region)
     end
-
+    
     def s3_url(k)
       Aws::S3Generator::Key.new(bucket, k).get
     end

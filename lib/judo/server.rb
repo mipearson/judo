@@ -21,7 +21,6 @@ module Judo
       version       = options[:version] || group.version
       instance_type = options[:instance_type] || group.config(version)['default_instance_type'] || 'm1.small'
 
-
       task("Creating server #{name}") do
         update("name" => name,         "group" => group_name,
                "virgin" => virgin,     "elastic_ip" => ip,
@@ -208,7 +207,7 @@ module Judo
     def clone_snapshots(snapshots)
       snapshots.each do |device,snap_id|
         task("Creating EC2 Volume #{device} from #{snap_id}") do
-          volume_id = @base.ec2.create_volume(snap_id, nil, config["availability_zone"])[:aws_id]
+          volume_id = @base.ec2.create_volume(snap_id, nil, availability_zone)[:aws_id]
           add_volume(volume_id, device)
         end
       end
@@ -222,7 +221,7 @@ module Judo
             size = volume_config["size"]
             if not volumes[device]
               task("Creating EC2 Volume #{device} #{size}") do
-                volume_id = @base.ec2.create_volume(nil, size, config["availability_zone"])[:aws_id]
+                volume_id = @base.ec2.create_volume(nil, size, availability_zone)[:aws_id]
                 add_volume(volume_id, device)
               end
             else
@@ -362,12 +361,22 @@ module Judo
       @keypair ||= Judo::Keypair.new(@base, (group.config(version)['keypair'] || 'judo'))
     end
     
+    def availability_zone
+      if config['availability_zone'].is_a?(Hash) && config['availability_zone'][@base.region]
+        config['availability_zone'][@base.region]
+      elsif config['availability_zone'].is_a? String
+        config['availability_zone']
+      else
+        @base.region + 'a'
+      end
+    end
+    
     def launch_ec2
       ud = user_data
       debug(ud)
       result = @base.ec2.launch_instances(ami,
         :instance_type => instance_type,
-        :availability_zone => config["availability_zone"],
+        :availability_zone => availability_zone,
         :key_name => keypair.name,
         :group_ids => security_groups,
         :user_data => ud).first
@@ -399,7 +408,14 @@ module Judo
     end
 
     def ami
-      ia32? ? config["ami32"] : config["ami64"]
+      section = ia32? ? 'ami32' : 'ami64'
+      if config[section].is_a? Hash
+        config[section][@base.region] or raise "No ami specified for region #{@base.region} in #{section} in config."
+      elsif config[section].is_a? String
+        config[section]
+      else
+        raise "No AMI(s) specified in #{section}"
+      end
     end
 
     def ia32?
