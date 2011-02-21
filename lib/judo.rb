@@ -13,6 +13,7 @@ require 'tempfile'
 class JudoError < RuntimeError ; end
 class JudoInvalid < RuntimeError ; end
 
+require_relative 'extras/force_encoding'
 require_relative 'extras/benchmark'
 require_relative 'judo/util'
 require_relative 'judo/base'
