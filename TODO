@@ -1,15 +1,24 @@
 * Fix issue where first ssh takes ages (dns?)
 
-* Unknown race condition:
+* Race condition:
 ---> Starting server soccer-app-ci... /Users/mpearson/.rvm/gems/ruby-1.9.2-p0/gems/aws-2.4.2/lib/awsbase/awsbase.rb:540:in `request_info_impl': InvalidInstanceID.NotFound: The instance ID 'i-01ea796d' does not exist (Aws::AwsError)
 REQUEST=ec2.amazonaws.com:443/?AWSAccessKeyId=AKIAI57IM5CQTGKGLPSQ&Action=CreateTags&ResourceId.1=i-01ea796d&SignatureMethod=HmacSHA256&SignatureVersion=2&Tag.1.Key=Name&Tag.1.Value=soccer-app-ci&Timestamp=2011-02-03T23%3A50%3A43.000Z&Version=2010-08-31&Signature=wlWB1ubB2AYGNqFzW8RQoJORIMv%2FUH%2Bz2gYZnf%2FuPb8%3D 
 REQUEST ID=0b3c46f8-a580-4ad4-b3e7-01c9d10f5799 
+  Worked around with a sleep 1 after starting the instance and before tagging.
 
 * scp support
 
+* ssh command support ("judo ssh my_instance sudo /etc/init.d/tomcat6 restart")
+
 * Port to bundler
 
+* Port to clamp
+
 * Some native way of juggling multiple accounts
+  (maybe not - this is a use case specific to my workplace, and would probably harm the implemtation more than help)
+
+* Region support
+  either by config or by environment variable
 
 * Look at fog instead of right_aws
 
@@ -21,6 +30,9 @@ REQUEST ID=0b3c46f8-a580-4ad4-b3e7-01c9d10f5799
 
 * Attempt to make judo list output fit on a 80column terminal (autoscale?)
 
-* Judo commit history / commit messages
+* Judo commit history / commit messages (use git instead?)
 
 * Er, did I add functionality that already exists with :default_instance_type? Check to see if :instance_type works (although I can't see it in the code)
+  (no, I didn't - it doesn't work.)
+  
+* Simpledb or other information caching for those working on high-laency links (ie, us plebs in Australia)
