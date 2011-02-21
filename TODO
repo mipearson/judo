@@ -28,11 +28,15 @@ REQUEST ID=0b3c46f8-a580-4ad4-b3e7-01c9d10f5799
 
 * Warn on destroy if owner tag != ENV['USER']
 
-* Attempt to make judo list output fit on a 80column terminal (autoscale?)
+* Attempt to make judo list output fit on a 80 column terminal (autoscale?)
 
-* Judo commit history / commit messages (use git instead?)
+* uninstall command (remove s3, sdb, not keypair unless forced)
 
 * Er, did I add functionality that already exists with :default_instance_type? Check to see if :instance_type works (although I can't see it in the code)
   (no, I didn't - it doesn't work.)
+  (then I should probably fix the docs)
   
 * Simpledb or other information caching for those working on high-laency links (ie, us plebs in Australia)
+
+* Centralized region support: store everything in one SDB (region specified by environment, eg I'd have it in ap-southeast-1),
+  track instances in many regions.
